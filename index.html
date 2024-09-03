@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #34caeb;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f6a5d8;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #c2a4a4;
+            border-radius: 5px;
+            resize: none;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #4caf50;
+        }
+        .logo h2 {
+            margin-top: 10px;
+            color: #4caf50;
+        }
+        .author-info {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h2>Sentiment Analysis</h2>
+        </div>
+        <textarea id="textInput" rows="4" placeholder="Enter your text here..."></textarea><br>
+        <button onclick="analyzeSentiment()">Analyze</button>
+        <p id="result"></p>
+
+        <div class="author-info">
+            <p>TTL PROJECT</p>
+            <p>Made by BIBEK RANJAN SAHOO & SUDHANSHU RANJAN</p>
+            <p>Roll: 21052244 & 21052369</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function analyzeSentiment() {
+            var text = $("#textInput").val();
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "/predict",
+                data: JSON.stringify({"text": text}),
+                success: function(response) {
+                    var sentiment = response.sentiment;
+                    if (sentiment == 1) {
+                        $("#result").text("Sentiment: Positive").css("color", "#4caf50");
+                    } else if (sentiment == 0) {
+                        $("#result").text("Sentiment: Neutral").css("color", "#333");
+                    } else {
+                        $("#result").text("Sentiment: Negative").css("color", "#f44336");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
